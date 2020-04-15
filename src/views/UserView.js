@@ -3,6 +3,9 @@ import React, { useState } from "react";
 const UserView = (props) => {
   const [profileName, setProfileName] = useState(localStorage.GeoTrasherName);
   const handleSignout = () => {
+    // reset LocalStorage
+    localStorage.setItem("GeoTrashName", "Anonymous");
+    localStorage.setItem("token", "");
     props.updateView("FirstView");
   };
   return (

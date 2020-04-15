@@ -11,16 +11,18 @@ function App() {
   const [currentView, setCurrentView] = useState();
   const [viewKey, setViewKey] = useState("FirstView");
   const [currentUser, setCurrentUser] = useState("Anonymous");
-
   const updateView = (viewName) => {
     console.log("updating View:", viewName);
     setViewKey(viewName);
   };
 
-  const updateUserName = (userName) => {
-    console.log("Updating user name:", userName);
-    setCurrentUser(userName);
-  };
+  // Check if user is already signed in
+  useEffect(() => {
+    if (localStorage.token != "" && localStorage.GeoTrashName != "") {
+      setCurrentUser(localStorage.GeoTrashName);
+      setViewKey("UserView");
+    }
+  }, []);
 
   useEffect(() => {
     // Set view based on key
@@ -30,7 +32,7 @@ function App() {
         view = <FirstView serverHost={serverHost} updateView={updateView} />;
         break;
       case "UserView":
-        view = <UserView updateView={updateView} />;
+        view = <UserView updateView={updateView} currentUser={currentUser} />;
         break;
       case "SessionView":
         view = <SessionView serverHost={serverHost} updateView={updateView} />;
