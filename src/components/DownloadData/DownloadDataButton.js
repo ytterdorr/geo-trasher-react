@@ -1,5 +1,4 @@
 import React from "react";
-import Card from "../Card/Card";
 
 const DownloadDataButton = (props) => {
   const downloadAsCsv = () => {

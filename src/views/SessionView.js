@@ -12,11 +12,14 @@ class SessionView extends Component {
         Annat: 0,
       },
       itemTypes: ["Nikotin", "Annat"],
+      sendingData: false,
+      message: "",
     };
     this.handleEndSession = this.handleEndSession.bind(this);
-    this.getSessionId = this.getSessionId.bind(this);
+    this.startSession = this.startSession.bind(this);
     this.addItem = this.addItem.bind(this);
     this.saveByNumClicks = this.saveByNumClicks.bind(this);
+    this.sendDataToServer = this.sendDataToServer.bind(this);
   }
 
   /// Get date
@@ -31,8 +34,6 @@ class SessionView extends Component {
         resolve(position);
       });
     });
-    let date = this.getUTCDate(Date(pos.timestamp));
-    // console.log(date);
     return pos;
   };
 
@@ -69,46 +70,91 @@ class SessionView extends Component {
     this.setState({ itemCount: sessionItems.counter });
   };
 
-  handleEndSession = function () {
-    sessionStorage.setItem("sessionID", 0);
-    if (
-      !localStorage.GeoTrashName ||
-      localStorage.GeoTrashName === "Anonymous"
-    ) {
-      this.props.updateView("FirstView");
+  handleEndSession = async function () {
+    let storeResult = await this.sendDataToServer().then((result) => result);
+    console.log("StoreResult", storeResult);
+    if (storeResult.success) {
+      sessionStorage.setItem("sessionID", 0);
+      if (
+        !localStorage.GeoTrashName ||
+        localStorage.GeoTrashName === "Anonymous"
+      ) {
+        this.props.updateView("FirstView");
+      } else {
+        this.props.updateView("UserView");
+      }
     } else {
-      this.props.updateView("UserView");
+      console.log("Error sending data");
+      this.setState({ message: "Error sending data, please try again." });
     }
   };
 
-  getSessionId = async () => {
+  startSession = async () => {
+    // Check username
+    if (!localStorage.GeoTrashName) {
+      localStorage.setItem("GeoTrashName", "Anonymous");
+    }
+    let username = localStorage.GeoTrashName;
+
+    // Get session ID
     let sessionID = await (
-      await fetch(`${this.props.serverHost}/start_session`)
+      await fetch(`${this.props.serverHost}/start_session/${username}`)
     ).json();
     sessionStorage.setItem("sessionID", sessionID);
+    console.log("SessionID:", sessionID);
   };
 
-  componentDidMount() {
-    // document.addEventListener("keydown", this.handleKeyDown);
-    // document.addEventListener("keyup", this.handleKeyUp);
-    this.getSessionId();
+  sendDataToServer = async () => {
+    this.setState({ sendingData: true, message: "sending data.." });
+    let data = JSON.parse(sessionStorage.items).list;
+    let url = `${this.props.serverHost}/dump_data`;
+    let result = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ data: data }),
+    })
+      .then((res) => res.json())
+      .catch((error) => {
+        console.log(error);
+      });
+
+    console.log("[SendData] Result:", result);
+    this.setState({ sendingData: false, message: "" });
+    return result;
+  };
+
+  componentDidMount = async () => {
     if (!sessionStorage.items) {
+      this.startSession();
+
+      // Initialize item list
       let items = { list: [], counter: { Nikotin: 0, Annat: 0 } };
       sessionStorage.setItem("items", JSON.stringify(items));
 
+      // Set start item
       this.addItem("Start");
     }
     let itemCount = JSON.parse(sessionStorage.items).counter;
     this.setState({ itemCount: itemCount });
-  }
+  };
 
-  componentWillUnmount() {
-    // document.removeEventListener("keydown", this.handleKeyDown);
-    // document.removeEventListener("keyup", this.handleKeyUp);
-    sessionStorage.setItem("sessionID", 0);
-    // console.log(sessionStorage.items);
-    sessionStorage.setItem("items", "");
-  }
+  componentWillUnmount = async () => {
+    let storeSuccess = await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({ success: true });
+      }, 1000);
+    })
+      .then((result) => {
+        sessionStorage.setItem("sessionID", 0);
+        sessionStorage.setItem("items", "");
+      })
+      .catch((error) => {
+        console.log("Send not successful");
+      });
+  };
 
   render() {
     return (
@@ -118,6 +164,7 @@ class SessionView extends Component {
           Session,{" "}
           {localStorage.GeoTrashName ? localStorage.GeoTrashName : "Anonymous"}
         </h1>
+        <div>{this.state.message}</div>
         <button onClick={this.handleEndSession}>End session</button>
         <br />
         <Card>
