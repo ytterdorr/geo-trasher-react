@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Card from "../components/Card/Card";
+import DownloadDataButton from "../components/DownloadData/DownloadDataButton";
 
 class SessionView extends Component {
   constructor(props) {
@@ -21,7 +22,6 @@ class SessionView extends Component {
     this.startSendTimer = this.startSendTimer.bind(this);
     this.getSessionId = this.getSessionId.bind(this);
     this.addItem = this.addItem.bind(this);
-    this.downloadAsCsv = this.downloadAsCsv.bind(this);
   }
 
   /// Get date
@@ -47,13 +47,6 @@ class SessionView extends Component {
     // [type, latitude, longitude, time, sessionID]
     let position = await this.getPosition();
     let timestamp = this.getUTCDate();
-    // let item = {
-    //   type: itemType,
-    //   latitude: position.coords.latitude,
-    //   longitude: position.coords.longitude,
-    //   timestamp: timestamp,
-    //   sessionID: sessionStorage.sessionID,
-    // };
     let item = [
       itemType,
       position.coords.latitude,
@@ -141,27 +134,6 @@ class SessionView extends Component {
     sessionStorage.setItem("sessionID", sessionID);
   };
 
-  downloadAsCsv() {
-    let headers = [["Type", "Latitude", "Longitude", "DateTime", "SessionID"]];
-    let data = JSON.parse(sessionStorage.items).list;
-    let arr = headers.concat(data);
-    let csvContent = arr.map((e) => e.join(",")).join("\n");
-    this.download("datafile.csv", csvContent);
-  }
-
-  download(filename, text) {
-    var element = document.createElement("a");
-    element.setAttribute(
-      "href",
-      "data:text/plain;charset=utf-8," + encodeURIComponent(text)
-    );
-    element.setAttribute("download", filename);
-    element.style.display = "none";
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  }
-
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("keyup", this.handleKeyUp);
@@ -201,7 +173,8 @@ class SessionView extends Component {
             Annat: {this.state.itemCount.Annat}
           </p>
         </Card>
-        <button onClick={this.downloadAsCsv}>Download Session Data</button>
+        {/* <button onClick={this.downloadAsCsv}>Download Session Data</button> */}
+        <DownloadDataButton />
       </div>
     );
   }
