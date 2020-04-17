@@ -1,27 +1,22 @@
 import React, { Component } from "react";
 import Card from "../components/Card/Card";
 import DownloadDataButton from "../components/DownloadData/DownloadDataButton";
+import ClickHandler from "../components/ClickHandler/ClickHandler";
 
 class SessionView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lastKeyUp: 0,
-      lastKeyDown: 0,
-      clickType: "single",
-      doubleClickTime: 600,
-      timerRunning: false,
       itemCount: {
         Nikotin: 0,
         Annat: 0,
       },
+      itemTypes: ["Nikotin", "Annat"],
     };
     this.handleEndSession = this.handleEndSession.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
-    this.startSendTimer = this.startSendTimer.bind(this);
     this.getSessionId = this.getSessionId.bind(this);
     this.addItem = this.addItem.bind(this);
+    this.saveByNumClicks = this.saveByNumClicks.bind(this);
   }
 
   /// Get date
@@ -37,9 +32,17 @@ class SessionView extends Component {
       });
     });
     let date = this.getUTCDate(Date(pos.timestamp));
-    console.log(date);
+    // console.log(date);
     return pos;
   };
+
+  saveByNumClicks(numClicks) {
+    let itemTypes = this.state.itemTypes;
+    // keep in bounds.
+    if (numClicks - 1 > itemTypes.length) numClicks = itemTypes.length;
+    let itemType = this.state.itemTypes[numClicks - 1];
+    this.addItem(itemType);
+  }
 
   addItem = async (itemType) => {
     // Store item in session storage
@@ -54,33 +57,17 @@ class SessionView extends Component {
       timestamp,
       sessionStorage.sessionID,
     ];
-    console.log(item);
+    // console.log(item);
     let sessionItems = JSON.parse(sessionStorage.items);
     sessionItems.list.push(item);
     sessionItems.counter[itemType] += 1;
 
     sessionStorage.setItem("items", JSON.stringify(sessionItems));
-    console.log(sessionItems);
+    // console.log(sessionItems);
 
     // Update State
     this.setState({ itemCount: sessionItems.counter });
   };
-
-  startSendTimer() {
-    if (!this.state.timerRunning) {
-      this.setState({ timerRunning: true });
-      setTimeout(() => {
-        let itemType = "error";
-        if (this.state.clickType === "single") {
-          itemType = "Nikotin";
-        } else if (this.state.clickType === "double") {
-          itemType = "Annat";
-        }
-        this.addItem(itemType);
-        this.setState({ timerRunning: false });
-      }, this.state.doubleClickTime);
-    }
-  }
 
   handleEndSession = function () {
     sessionStorage.setItem("sessionID", 0);
@@ -94,39 +81,6 @@ class SessionView extends Component {
     }
   };
 
-  handleKeyDown(event) {
-    if (event.key === "Enter") {
-      console.log("Down", event.key);
-      // Some shorter names
-      let now = Date.now();
-      let lastDown = this.state.lastKeyDown;
-      let lastUp = this.state.lastKeyUp;
-      let doubleClick = this.state.doubleClickTime;
-      // check double click
-      if (now - lastDown < doubleClick && lastUp > lastDown) {
-        console.log("Double Click!");
-        this.setState({ clickType: "double" });
-      }
-      // Check new single click
-      else if (now - lastDown > doubleClick) {
-        console.log("New click");
-        this.setState({ clickType: "single" });
-        this.startSendTimer();
-      }
-      this.setState({ lastKeyDown: now });
-    }
-  }
-
-  handleKeyUp(event) {
-    if (event.key === "Enter") {
-      let now = Date.now();
-      if (now - this.state.lastKeyUp > this.state.doubleClickTime) {
-        console.log("new up");
-        this.setState({ lastKeyUp: now });
-      }
-    }
-  }
-
   getSessionId = async () => {
     let sessionID = await (
       await fetch(`${this.props.serverHost}/start_session`)
@@ -135,8 +89,8 @@ class SessionView extends Component {
   };
 
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyDown);
-    document.addEventListener("keyup", this.handleKeyUp);
+    // document.addEventListener("keydown", this.handleKeyDown);
+    // document.addEventListener("keyup", this.handleKeyUp);
     this.getSessionId();
     if (!sessionStorage.items) {
       let items = { list: [], counter: { Nikotin: 0, Annat: 0 } };
@@ -149,16 +103,17 @@ class SessionView extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown);
-    document.removeEventListener("keyup", this.handleKeyUp);
+    // document.removeEventListener("keydown", this.handleKeyDown);
+    // document.removeEventListener("keyup", this.handleKeyUp);
     sessionStorage.setItem("sessionID", 0);
-    console.log(sessionStorage.items);
+    // console.log(sessionStorage.items);
     sessionStorage.setItem("items", "");
   }
 
   render() {
     return (
       <div id="">
+        <ClickHandler sendNumClicks={this.saveByNumClicks} />
         <h1>
           Session,{" "}
           {localStorage.GeoTrashName ? localStorage.GeoTrashName : "Anonymous"}
