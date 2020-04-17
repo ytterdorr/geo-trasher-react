@@ -10,6 +10,7 @@ import Colors from "../../Colors";
 const DataDisplay = (props) => {
   const [itemCount, setItemCount] = useState({ nikotin: 0, annat: 0 });
   const [isLoading, setIsLoading] = useState(true);
+  const [startGetData, setStartGetData] = useState(true);
   // const [refreshing, setRefreshing] = useState(true);
 
   const serverHost = props.serverHost;
@@ -30,6 +31,7 @@ const DataDisplay = (props) => {
   useEffect(() => {
     console.log("[DataDisplay] use effect");
     if (isLoading) {
+      setStartGetData(false);
       getSessionItemCount();
     }
   }, [isLoading]);

@@ -30,7 +30,7 @@ const FirstView = (props) => {
     </div>
   );
 };
-const background = "globe-32299_1280.png";
+
 const myStyles = {
   CardStyle: {
     backgroundColor: Colors.defaultBackground,

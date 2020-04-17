@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 
 const UserView = (props) => {
-  const [profileName, setProfileName] = useState(localStorage.GeoTrasherName);
   const handleSignout = () => {
     // reset LocalStorage
     localStorage.setItem("GeoTrashName", "Anonymous");
     localStorage.setItem("token", "");
     props.updateView("FirstView");
   };
+
+  const handleNewSession = () => {
+    props.updateView("SessionView");
+  };
   return (
     <div>
-      <h1>Hi, {profileName ? profileName : "Person"}!</h1>
+      <h1>Hi, {localStorage.GeoTrashName}!</h1>
       <button onClick={handleSignout}>Sign Out</button>
+      <button onClick={handleNewSession}>New Session</button>
     </div>
   );
 };
