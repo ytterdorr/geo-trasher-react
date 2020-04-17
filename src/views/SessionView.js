@@ -21,6 +21,7 @@ class SessionView extends Component {
     this.startSendTimer = this.startSendTimer.bind(this);
     this.getSessionId = this.getSessionId.bind(this);
     this.addItem = this.addItem.bind(this);
+    this.downloadAsCsv = this.downloadAsCsv.bind(this);
   }
 
   /// Get date
@@ -42,15 +43,24 @@ class SessionView extends Component {
 
   addItem = async (itemType) => {
     // Store item in session storage
+    // Item info is stored as lists.
+    // [type, latitude, longitude, time, sessionID]
     let position = await this.getPosition();
     let timestamp = this.getUTCDate();
-    let item = {
-      type: itemType,
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-      timestamp: timestamp,
-      sessionID: sessionStorage.sessionID,
-    };
+    // let item = {
+    //   type: itemType,
+    //   latitude: position.coords.latitude,
+    //   longitude: position.coords.longitude,
+    //   timestamp: timestamp,
+    //   sessionID: sessionStorage.sessionID,
+    // };
+    let item = [
+      itemType,
+      position.coords.latitude,
+      position.coords.longitude,
+      timestamp,
+      sessionStorage.sessionID,
+    ];
     console.log(item);
     let sessionItems = JSON.parse(sessionStorage.items);
     sessionItems.list.push(item);
@@ -131,6 +141,27 @@ class SessionView extends Component {
     sessionStorage.setItem("sessionID", sessionID);
   };
 
+  downloadAsCsv() {
+    let headers = [["Type", "Latitude", "Longitude", "DateTime", "SessionID"]];
+    let data = JSON.parse(sessionStorage.items).list;
+    let arr = headers.concat(data);
+    let csvContent = arr.map((e) => e.join(",")).join("\n");
+    this.download("datafile.csv", csvContent);
+  }
+
+  download(filename, text) {
+    var element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+    );
+    element.setAttribute("download", filename);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("keyup", this.handleKeyUp);
@@ -170,6 +201,7 @@ class SessionView extends Component {
             Annat: {this.state.itemCount.Annat}
           </p>
         </Card>
+        <button onClick={this.downloadAsCsv}>Download Session Data</button>
       </div>
     );
   }
