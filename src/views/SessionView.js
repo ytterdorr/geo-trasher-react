@@ -133,6 +133,9 @@ class SessionView extends Component {
     sessionStorage.setItem("sessionID", sessionID);
     console.log("SessionID:", sessionID);
 
+    // Set start item
+    this.addItem("Start");
+
     // Set session name not already set.
 
     let sessionName = sessionStorage.sessionName
@@ -170,9 +173,6 @@ class SessionView extends Component {
       // Initialize item list
       let items = { list: [], counter: { Nikotin: 0, Annat: 0 } };
       sessionStorage.setItem("items", JSON.stringify(items));
-
-      // Set start item
-      this.addItem("Start");
     }
     let itemCount = JSON.parse(sessionStorage.items).counter;
     let sessionName = sessionStorage.sessionName;
