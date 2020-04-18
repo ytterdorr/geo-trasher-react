@@ -25,6 +25,17 @@ function App() {
   // Check if user is already signed i
 
   useEffect(() => {
+    const forceHTTPS = () => {
+      console.log("Location:", window.location.href[4]);
+      let url = window.location.href;
+      if (url[4] !== "s") {
+        window.location = url.slice(0, 4) + "s" + url.slice(4);
+      }
+    };
+
+    if (!window.location.href.includes("localhost")) {
+      forceHTTPS();
+    }
     // Set view based on key
     let view;
     switch (viewKey) {

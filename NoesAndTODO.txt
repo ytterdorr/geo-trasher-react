@@ -1,7 +1,11 @@
-SesionView: 
-- Enable Rename session
-  (Input field + server update)
+General:
+- Make sure user has https.
 
+
+SessionView: 
+=0= Enable Rename session
+  (Input field + server update)
+=0= Make detailed info relevant (i.e. date, start end time, download data, map)
 
 UserView:
 =0= Make Title based on localStorage.
