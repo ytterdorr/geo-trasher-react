@@ -5,8 +5,8 @@ import UserView from "./views/UserView";
 import SessionView from "./views/SessionView";
 
 function App() {
-  const serverHost = "http://localhost:5000";
-  // const serverHost = "https://ytterdorr.pythonanywhere.com";
+  // const serverHost = "http://localhost:5000";
+  const serverHost = "https://ytterdorr.pythonanywhere.com";
 
   const [currentView, setCurrentView] = useState();
   const [viewKey, setViewKey] = useState(
