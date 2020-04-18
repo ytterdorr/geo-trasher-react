@@ -15,7 +15,7 @@ const UserSessions = (props) => {
 
   const showDetailsOnClick = (sessionID) => {
     const showDetails = () => {
-      // setDetailSessionNumber(sessionID);
+      console.log(sessionID);
       let data;
       for (let session of sessionData) {
         if (session.sessionID == sessionID) {
@@ -46,6 +46,7 @@ const UserSessions = (props) => {
         });
       // console.log(userSessions.message);
       userSessions = userSessions.data;
+      // console.log("userSessions:", userSessions);
 
       let sessionDivs = [];
       for (let session of userSessions) {
@@ -55,6 +56,7 @@ const UserSessions = (props) => {
       }
       setSessionData(sessionDivs.reverse());
       setIsLoading(false);
+      console.log(sessionData);
     };
 
     getSessions();
