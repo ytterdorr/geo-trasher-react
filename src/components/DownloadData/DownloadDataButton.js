@@ -6,7 +6,10 @@ const DownloadDataButton = (props) => {
     let data = JSON.parse(sessionStorage.items).list;
     let arr = headers.concat(data);
     let csvContent = arr.map((e) => e.join(",")).join("\n");
-    let defaultName = "datafile";
+    let defaultName = sessionStorage.sessionName;
+    defaultName = defaultName
+      ? defaultName.split(" ").join("_")
+      : "GeoTrasher_" + new Date().toISOString().slice(0, 10);
     let setName = window.prompt("Download data", defaultName);
     if (setName) {
       let fileName = setName + ".csv";

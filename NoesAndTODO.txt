@@ -1,2 +1,7 @@
+SesionView: 
+- Enable Rename session
+  (Input field + server update)
+
+
 UserView:
-- Make Title based on localStorage.
+=0= Make Title based on localStorage.

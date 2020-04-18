@@ -7,6 +7,7 @@ class SessionView extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      sessionName: "",
       itemCount: {
         Nikotin: 0,
         Annat: 0,
@@ -20,6 +21,8 @@ class SessionView extends Component {
     this.addItem = this.addItem.bind(this);
     this.saveByNumClicks = this.saveByNumClicks.bind(this);
     this.sendDataToServer = this.sendDataToServer.bind(this);
+    this.setSessionName = this.setSessionName.bind(this);
+    this.changeSessionName = this.changeSessionName.bind(this);
   }
 
   /// Get date
@@ -89,6 +92,33 @@ class SessionView extends Component {
     }
   };
 
+  setSessionName = async (sessionName) => {
+    this.setState({ sessionName });
+    console.log("sesisonName:", this.state.sessionName);
+    sessionStorage.setItem("sessionName", sessionName);
+    let url = `${this.props.serverHost}/update_session_name`;
+    let result = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        sessionID: sessionStorage.sessionID,
+        newName: sessionName,
+      }),
+    }).then((res) => res.json());
+
+    console.log(result);
+  };
+
+  changeSessionName() {
+    let newName = window.prompt("New name", new Date().toDateString());
+    if (newName) {
+      this.setSessionName(newName);
+    }
+  }
+
   startSession = async () => {
     // Check username
     if (!localStorage.GeoTrashName) {
@@ -102,6 +132,13 @@ class SessionView extends Component {
     ).json();
     sessionStorage.setItem("sessionID", sessionID);
     console.log("SessionID:", sessionID);
+
+    // Set session name not already set.
+
+    let sessionName = sessionStorage.sessionName
+      ? sessionStorage.sessionName
+      : `Session ${sessionID}`;
+    this.setSessionName(sessionName);
   };
 
   sendDataToServer = async () => {
@@ -138,7 +175,8 @@ class SessionView extends Component {
       this.addItem("Start");
     }
     let itemCount = JSON.parse(sessionStorage.items).counter;
-    this.setState({ itemCount: itemCount });
+    let sessionName = sessionStorage.sessionName;
+    this.setState({ itemCount, sessionName });
   };
 
   componentWillUnmount = async () => {
@@ -148,8 +186,10 @@ class SessionView extends Component {
       }, 1000);
     })
       .then((result) => {
+        // Clear session storage
         sessionStorage.setItem("sessionID", 0);
-        sessionStorage.setItem("items", "");
+        sessionStorage.removeItem("items");
+        sessionStorage.removeItem("sessionName");
       })
       .catch((error) => {
         console.log("Send not successful");
@@ -161,9 +201,13 @@ class SessionView extends Component {
       <div id="">
         <ClickHandler sendNumClicks={this.saveByNumClicks} />
         <h1>
-          Session,{" "}
-          {localStorage.GeoTrashName ? localStorage.GeoTrashName : "Anonymous"}
+          {this.state.sessionName
+            ? this.state.sessionName
+            : "Anonymous Session"}
         </h1>
+        <button style={{ marginBottom: 15 }} onClick={this.changeSessionName}>
+          Change name
+        </button>
         <div>{this.state.message}</div>
         <button onClick={this.handleEndSession}>End session</button>
         <br />
