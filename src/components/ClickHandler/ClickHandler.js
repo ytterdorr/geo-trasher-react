@@ -75,6 +75,7 @@ class ClickHandler extends Component {
   }
 
   handleKeyDown(event) {
+    console.log("keyDown", event.key);
     if (this.state.useAdvanced) {
       this.advancedDown(event);
       return;
@@ -113,6 +114,7 @@ class ClickHandler extends Component {
   }
 
   handleKeyUp(event) {
+    console.log("keyUp", event.key);
     if (this.state.useAdvanced) {
       this.advancedUp(event);
       return;
