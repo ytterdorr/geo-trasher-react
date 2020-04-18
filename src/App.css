@@ -1,6 +1,6 @@
 :root {
   --primary-color: blue;
-  --my-blue: #0307df;
+  --my-blue: #a5a4ff;
   --secondary-color: rgb(241, 233, 226);
   --default-background: #ffdfdd;
 }
@@ -20,4 +20,10 @@
   flex-direction: column;
   align-items: center;
   background-color: lightgrey;
+}
+
+button {
+  background-color: var(--my-blue);
+  padding: 5px;
+  border-radius: 5px;
 }

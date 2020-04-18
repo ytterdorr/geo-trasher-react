@@ -2,7 +2,7 @@ import React from "react";
 import DataDisplay from "../components/DataDisplay/DataDisplay";
 // import Card from "../components/Card/Card";
 import SigninSignup from "../components/SigninSignup/SigninSignup";
-import Colors from "../Colors";
+import Colors from "../styles/Colors";
 // What do I Want to present in this first view?
 // Data-display
 //

@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-
+import { Component } from "react";
 class ClickHandler extends Component {
   constructor(props) {
     super(props);
@@ -46,12 +45,11 @@ class ClickHandler extends Component {
   }
 
   advancedDown(event) {
-    if (event.key == "Enter") {
+    if (event.key === "Enter") {
       // console.log("advanced Down", event.key);
       // Some shorter names
       let now = Date.now();
       let lastDown = this.state.lastKeyDown;
-      let lastUp = this.state.lastKeyUp;
       let doubleClick = this.state.doubleClickTime;
       // check double click
       console.log("timeDiff:", now - lastDown);

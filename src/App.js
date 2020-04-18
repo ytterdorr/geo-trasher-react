@@ -5,8 +5,8 @@ import UserView from "./views/UserView";
 import SessionView from "./views/SessionView";
 
 function App() {
-  const serverHost = "http://localhost:5000";
-  // const serverHost = "https://ytterdorr.pythonanywhere.com";
+  // const serverHost = "http://localhost:5000";
+  const serverHost = "https://ytterdorr.pythonanywhere.com";
 
   const [currentView, setCurrentView] = useState();
   const [viewKey, setViewKey] = useState(
@@ -32,7 +32,7 @@ function App() {
         view = <FirstView serverHost={serverHost} updateView={updateView} />;
         break;
       case "UserView":
-        view = <UserView updateView={updateView} />;
+        view = <UserView serverHost={serverHost} updateView={updateView} />;
         break;
       case "SessionView":
         view = <SessionView serverHost={serverHost} updateView={updateView} />;

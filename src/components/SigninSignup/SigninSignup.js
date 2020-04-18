@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Card from "../Card/Card";
-import Colors from "../../Colors";
+import Colors from "../../styles/Colors";
 const SigninSignup = (props) => {
   const [uNameVal, setUNameVal] = useState("");
   const [passVal, setPassVal] = useState("");
