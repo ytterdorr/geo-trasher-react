@@ -37,6 +37,7 @@ const SigninSignup = (props) => {
       localStorage.GeoTrashName = uNameVal;
       localStorage.token = result.data;
       props.updateView("UserView");
+      // props.updateView("FirstView");
     }
   };
 

@@ -37,18 +37,19 @@ const DataDisplay = (props) => {
   return (
     <Card style={{ ...styles.CardStyle, ...props.style }}>
       <div className="data-display-holder">
-        <h4 className="card-title">Plockade Saker</h4>
+        <h4 className="card-title">Trash items picked</h4>
         {isLoading ? (
           <p>Loading...</p>
         ) : (
           <p>
-            Nikotin: {itemCount.nikotin} <br />
-            Annat: {itemCount.annat}
+            Nicotine: {itemCount.nikotin} <br />
+            Other: {itemCount.annat} <br />
+            <b>Total: {itemCount.nikotin + itemCount.annat}</b>
           </p>
         )}
-        <button type="button" onClick={getSessionItemCount}>
+        {/* <button type="button" onClick={getSessionItemCount}>
           Press for data
-        </button>
+        </button> */}
       </div>
     </Card>
   );

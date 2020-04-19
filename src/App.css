@@ -27,3 +27,15 @@ button {
   padding: 5px;
   border-radius: 5px;
 }
+
+table {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+
+tr {
+  border-bottom: 1px solid black;
+}
+td {
+  padding: 5px;
+}

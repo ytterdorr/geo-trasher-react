@@ -9,24 +9,31 @@ import Colors from "../styles/Colors";
 
 const FirstView = (props) => {
   const handleSessionButton = () => {
-    localStorage.GeoTrashName = "Anonymous";
     props.updateView("SessionView");
+  };
+
+  const handleMyPageButton = () => {
+    props.updateView("UserView");
   };
   return (
     <div className="view-container">
       <h1>GeoTrasher!</h1>
-      <button style={myStyles.Button} onClick={handleSessionButton}>
-        Anonymous session
-      </button>
-      <SigninSignup
-        serverHost={props.serverHost}
-        updateView={props.updateView}
-      />
       <DataDisplay
         serverHost={props.serverHost}
         sessionID="0"
         style={myStyles.CardStyle}
       />
+      {localStorage.token ? (
+        <button onClick={handleMyPageButton}>My Page</button>
+      ) : (
+        <SigninSignup
+          serverHost={props.serverHost}
+          updateView={props.updateView}
+        />
+      )}
+      <button style={myStyles.Button} onClick={handleSessionButton}>
+        Anonymous session
+      </button>
     </div>
   );
 };

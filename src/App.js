@@ -30,6 +30,7 @@ function App() {
       let url = window.location.href;
       if (url[4] !== "s") {
         window.location = url.slice(0, 4) + "s" + url.slice(4);
+        console.log("Found http, forcing https");
       }
     };
 
