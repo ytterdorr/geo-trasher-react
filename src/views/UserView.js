@@ -53,15 +53,14 @@ const UserView = (props) => {
       </button>
       <h2>My Total: </h2>
 
-      <Card>
-        <br />
+      <Card style={{ width: "100vw", margin: "auto" }}>
         {totalItems ? (
-          <React.Fragment>
+          <div>
             <b>All Items: {totalItems.Nikotin + totalItems.Annat}</b> <br />
             Nicotine: {totalItems.Nikotin}
             <br />
             Other: {totalItems.Annat}
-          </React.Fragment>
+          </div>
         ) : (
           "Loading..."
         )}

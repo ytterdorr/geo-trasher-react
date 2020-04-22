@@ -9,3 +9,7 @@ SessionView:
 
 UserView:
 =0= Make Title based on localStorage.
+
+
+Optional/optimization:
+- make session list scrollable

@@ -141,7 +141,7 @@ class ClickHandler extends Component {
   }
 
   render() {
-    return "Clicker body";
+    return "";
   }
 }
 

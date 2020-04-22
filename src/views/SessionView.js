@@ -15,6 +15,7 @@ class SessionView extends Component {
       itemTypes: ["Nikotin", "Annat"],
       sendingData: false,
       message: "",
+      onScreenButtons: false,
     };
     this.handleEndSession = this.handleEndSession.bind(this);
     this.startSession = this.startSession.bind(this);
@@ -23,6 +24,8 @@ class SessionView extends Component {
     this.sendDataToServer = this.sendDataToServer.bind(this);
     this.setSessionName = this.setSessionName.bind(this);
     this.changeSessionName = this.changeSessionName.bind(this);
+    this.toggleOnScreenButtons = this.toggleOnScreenButtons.bind(this);
+    this.onScreenButtonSetter = this.onScreenButtonSetter.bind(this);
   }
 
   /// Get date
@@ -38,6 +41,13 @@ class SessionView extends Component {
       });
     });
     return pos;
+  };
+
+  onScreenButtonSetter = (itemName) => {
+    const onScreenButtonOnCLick = () => {
+      this.addItem(itemName);
+    };
+    return onScreenButtonOnCLick;
   };
 
   saveByNumClicks(numClicks) {
@@ -119,6 +129,10 @@ class SessionView extends Component {
     }
   }
 
+  toggleOnScreenButtons() {
+    this.setState({ onScreenButtons: !this.state.onScreenButtons });
+  }
+
   startSession = async () => {
     // Check username
     if (!localStorage.GeoTrashName) {
@@ -198,32 +212,91 @@ class SessionView extends Component {
 
   render() {
     return (
-      <div id="">
+      <div id="" style={styles.container}>
         <ClickHandler sendNumClicks={this.saveByNumClicks} />
-        <h1>
+        <h1 style={styles.heading}>
           {this.state.sessionName
             ? this.state.sessionName
             : "Anonymous Session"}
         </h1>
-        <button style={{ marginBottom: 15 }} onClick={this.changeSessionName}>
-          Change name
-        </button>
+        <a href="#" onClick={this.changeSessionName}>
+          Change Title
+        </a>
         <div>{this.state.message}</div>
-        <button onClick={this.handleEndSession}>End session</button>
+
         <br />
-        <Card>
-          <h3>Plockat</h3>
-          <p>
-            Nikotin: {this.state.itemCount.Nikotin}
+        <Card style={{ padding: 20 }}>
+          <p style={{ margin: 0 }}>
+            <b>Picked Items</b> <br />
+            Nicotine: {this.state.itemCount.Nikotin}
             <br />
-            Annat: {this.state.itemCount.Annat}
+            Other: {this.state.itemCount.Annat}
           </p>
+          <br />
+          <a
+            onClick={this.toggleOnScreenButtons}
+            style={{ color: "blue", textDecoration: "underline" }}
+          >
+            Toggle Onscreen Buttons
+          </a>
         </Card>
         {/* <button onClick={this.downloadAsCsv}>Download Session Data</button> */}
+        <br />
+        {this.state.onScreenButtons ? (
+          <div
+            style={{
+              display: "flex",
+              width: "100vw",
+              height: 80,
+              justifyContent: "space-around",
+              fontSize: 20,
+              fontWeight: "bold",
+              marginBottom: 15,
+            }}
+          >
+            {this.state.itemTypes.map((item, i) => (
+              <button
+                key={i}
+                style={{
+                  width: "40%",
+                  backgroundColor: "red",
+                  color: "white",
+                }}
+                onClick={this.onScreenButtonSetter(item)}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        ) : null}
         <DownloadDataButton />
+        <br />
+        <button onClick={this.handleEndSession}>End session</button>
       </div>
     );
   }
 }
+
+const styles = {
+  titleHolder: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  buttonHolder: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 100,
+  },
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  heading: {
+    marginBottom: 0,
+  },
+};
 
 export default SessionView;

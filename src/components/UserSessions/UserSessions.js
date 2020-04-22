@@ -119,6 +119,7 @@ const UserSessions = (props) => {
                     className="sessionSummary"
                     style={{
                       display: "flex",
+                      alignItems: "center",
                       padding: 5,
                       width: "100%",
                     }}
@@ -127,9 +128,9 @@ const UserSessions = (props) => {
                       {session.title}
                     </div>
                     <div style={{ flex: 1, minWidth: 100 }}>
-                      Nikotin: {session.itemCount.Nikotin}
+                      Nicotine: {session.itemCount.Nikotin}
                       <br />
-                      Annat: {session.itemCount.Annat}
+                      Other: {session.itemCount.Annat}
                     </div>
                     <button
                       style={{ flex: 1 }}
