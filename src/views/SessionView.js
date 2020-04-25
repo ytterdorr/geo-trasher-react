@@ -12,7 +12,7 @@ class SessionView extends Component {
         Nikotin: 0,
         Annat: 0,
       },
-      itemTypes: ["Nikotin", "Annat"],
+      itemTypes: ["Nicotine", "Plastic", "Other"],
       sendingData: false,
       message: "",
       onScreenButtons: false,
@@ -185,7 +185,11 @@ class SessionView extends Component {
       this.startSession();
 
       // Initialize item list
-      let items = { list: [], counter: { Nikotin: 0, Annat: 0 } };
+      let counter = {};
+      for (let item of this.state.itemTypes) {
+        counter[item] = 0;
+      }
+      let items = { list: [], counter: counter };
       sessionStorage.setItem("items", JSON.stringify(items));
     }
     let itemCount = JSON.parse(sessionStorage.items).counter;
@@ -228,9 +232,17 @@ class SessionView extends Component {
         <Card style={{ padding: 20 }}>
           <p style={{ margin: 0 }}>
             <b>Picked Items</b> <br />
-            Nicotine: {this.state.itemCount.Nikotin}
+            {this.state.itemTypes.map((item) => {
+              return (
+                <React.Fragment>
+                  {item}: {this.state.itemCount[item]}
+                  <br />
+                </React.Fragment>
+              );
+            })}
+            {/* Nicotine: {this.state.itemCount.Nikotin}
             <br />
-            Other: {this.state.itemCount.Annat}
+            Other: {this.state.itemCount.Annat} */}
           </p>
           <br />
           <a

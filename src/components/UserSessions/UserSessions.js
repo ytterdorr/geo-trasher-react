@@ -128,9 +128,21 @@ const UserSessions = (props) => {
                       {session.title}
                     </div>
                     <div style={{ flex: 1, minWidth: 100 }}>
-                      Nicotine: {session.itemCount.Nikotin}
+                      {Object.keys(session.itemCount).map((item) => {
+                        return item === "Start" ||
+                          item === "New Session" ||
+                          item == "null" ? (
+                          ""
+                        ) : (
+                          <React.Fragment>
+                            {item}: {session.itemCount[item]}
+                            <br />
+                          </React.Fragment>
+                        );
+                      })}
+                      {/* Nicotine: {session.itemCount.Nikotin}
                       <br />
-                      Other: {session.itemCount.Annat}
+                      Other: {session.itemCount.Annat} */}
                     </div>
                     <button
                       style={{ flex: 1 }}

@@ -10,7 +10,7 @@ class ClickHandler extends Component {
       doubleClickTime: 600,
       timerRunning: false,
       timer: null,
-      useAdvanced: false,
+      useAdvanced: true,
     };
     // Bind methods
     this.handleKeyDown = this.handleKeyDown.bind(this);
