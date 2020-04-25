@@ -4,7 +4,7 @@ General:
 -> There is an error registerign itemtype "null" on advanced clicker...
 -> Make a better way with the user screen summation
 -> Add map to session end. 
-
+-> startsidan ska visa rätt total.
 
 SessionView: 
 =0= Enable Rename session

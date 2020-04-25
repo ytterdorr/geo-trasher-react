@@ -21,7 +21,11 @@ const DataDisplay = (props) => {
     axios.get(getUrl).then((result) => {
       let data = result.data;
       console.log(data);
-      setItemCount({ nikotin: data.Nikotin, annat: data.Annat });
+      setItemCount({
+        nikotin: data.Nikotin + data.Nicotine,
+        annat: data.Annat + data.Other,
+        plastic: data.Plastic,
+      });
       setIsLoading(false);
     });
   };
@@ -43,6 +47,7 @@ const DataDisplay = (props) => {
         ) : (
           <p>
             Nicotine: {itemCount.nikotin} <br />
+            Plastic: {itemCount.plastic} <br />
             Other: {itemCount.annat} <br />
             <b>Total: {itemCount.nikotin + itemCount.annat}</b>
           </p>
