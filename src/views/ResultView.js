@@ -53,9 +53,15 @@ const ResultView = (props) => {
         ></MapContainer>
       </div>
       <br />
-      <DownloadDataButton itemList={props.sessionStorageItems.list} />
-      <br />
-      <button onClick={handleFinish}>Finish</button>
+      <div style={{ display: "flex" }}>
+        <DownloadDataButton itemList={props.sessionStorageItems.list} />
+        <button
+          style={{ marginLeft: "5vw", minWidth: "80px" }}
+          onClick={handleFinish}
+        >
+          Done
+        </button>
+      </div>
     </div>
   );
 };
