@@ -158,12 +158,13 @@ const UserSessions = (props) => {
                       <br />
                       Other: {session.itemCount.Annat} */}
                     </div>
-                    <button
+                    {/* <button
                       style={{ flex: 1 }}
                       onClick={setToggleDetail(session.sessionID)}
+                      disabled={true}
                     >
-                      Details
-                    </button>
+                      View Details
+                    </button> */}
                   </div>
                   {session.showDetails ? <div>"Details!"</div> : null}
                 </div>

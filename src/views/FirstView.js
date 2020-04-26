@@ -34,6 +34,8 @@ const FirstView = (props) => {
       <button style={myStyles.Button} onClick={handleSessionButton}>
         Anonymous session
       </button>
+      <p>This is a work in progress, made by Tore Haglund. </p>
+      <a href="mailto: tore.haglund@gmail.com">Send Feedback</a>
     </div>
   );
 };
