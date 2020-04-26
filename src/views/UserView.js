@@ -56,10 +56,17 @@ const UserView = (props) => {
       <Card style={{ width: "100vw", margin: "auto" }}>
         {totalItems ? (
           <div>
-            <b>All Items: {totalItems.Nikotin + totalItems.Annat}</b> <br />
-            Nicotine: {totalItems.Nikotin}
-            <br />
-            Other: {totalItems.Annat}
+            <b>All Items: {totalItems.all}</b> <br />
+            {Object.keys(totalItems)
+              .slice(1)
+              .map((item, i) => {
+                return (
+                  <React.Fragment>
+                    {item}: {totalItems[item]}
+                    <br />
+                  </React.Fragment>
+                );
+              })}
           </div>
         ) : (
           "Loading..."

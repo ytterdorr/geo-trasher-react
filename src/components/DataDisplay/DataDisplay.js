@@ -22,8 +22,8 @@ const DataDisplay = (props) => {
       let data = result.data;
       console.log(data);
       setItemCount({
-        nikotin: data.Nikotin + data.Nicotine,
-        annat: data.Annat + data.Other,
+        nikotin: data.Nicotine,
+        annat: data.Other,
         plastic: data.Plastic,
       });
       setIsLoading(false);

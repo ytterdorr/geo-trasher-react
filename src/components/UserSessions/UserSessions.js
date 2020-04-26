@@ -65,7 +65,8 @@ const UserSessions = (props) => {
       userSessions = userSessions.data;
       // console.log("userSessions:", userSessions);
 
-      let totalItems = { Nikotin: 0, Annat: 0 };
+      // let totalItems = { Nikotin: 0, Annat: 0 };
+      let totalItems = { all: 0 };
 
       let sessionDivs = [];
       for (let session of userSessions) {
@@ -76,11 +77,24 @@ const UserSessions = (props) => {
         // console.log(session);
         sessionDivs.push(session);
         // Add to total:
-        if (session.itemCount.Nikotin)
-          totalItems.Nikotin += session.itemCount.Nikotin;
-        if (session.itemCount.Annat)
-          totalItems.Annat += session.itemCount.Annat;
+        for (let item of Object.keys(session.itemCount)) {
+          if (item !== "Start" && item !== "New Session" && item !== "null") {
+            if (!Object.keys(totalItems).includes(item)) {
+              console.log("Adding new item:", item);
+              totalItems[item] = 1;
+              totalItems.all += 1;
+            } else {
+              totalItems[item] += session.itemCount[item];
+              totalItems.all += session.itemCount[item];
+            }
+          }
+        }
+        // if (session.itemCount.Nikotin)
+        //   totalItems.Nikotin += session.itemCount.Nikotin;
+        // if (session.itemCount.Annat)
+        //   totalItems.Annat += session.itemCount.Annat;
       }
+      console.log("UserSessions, TotalItems:", totalItems);
       props.updateTotalItems(totalItems);
       setSessionData(sessionDivs.reverse());
       setIsLoading(false);
@@ -128,13 +142,13 @@ const UserSessions = (props) => {
                       {session.title}
                     </div>
                     <div style={{ flex: 1, minWidth: 100 }}>
-                      {Object.keys(session.itemCount).map((item) => {
+                      {Object.keys(session.itemCount).map((item, i) => {
                         return item === "Start" ||
                           item === "New Session" ||
                           item == "null" ? (
                           ""
                         ) : (
-                          <React.Fragment>
+                          <React.Fragment key={item + i}>
                             {item}: {session.itemCount[item]}
                             <br />
                           </React.Fragment>

@@ -44,6 +44,7 @@ const ResultView = (props) => {
         style={{
           width: "400px",
           height: "300px",
+          maxWidth: "100vw",
           backgroundColor: "gray",
         }}
       >

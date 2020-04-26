@@ -36,7 +36,11 @@ export class MapContainer extends Component {
   render() {
     return (
       <Map
-        containerStyle={{ maxWidth: "400px", maxHeight: "300px" }}
+        containerStyle={{
+          maxWidth: "100vw",
+          width: "400px",
+          maxHeight: "300px",
+        }}
         google={this.props.google}
         zoom={14}
         style={mapStyles}
@@ -48,8 +52,12 @@ export class MapContainer extends Component {
         {this.state.locations.map((item, i) => (
           <Marker
             key={item.name + i}
+            title={item.name}
             name={item.name}
             position={item.position}
+            // icon={{
+            //   url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+            // }}
           />
         ))}
         {/* <Marker
