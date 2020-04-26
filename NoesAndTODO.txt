@@ -17,3 +17,10 @@ UserView:
 
 Optional/optimization:
 - make session list scrollable
+
+
+
+
+
+Links
+https://www.npmjs.com/package/google-maps-react

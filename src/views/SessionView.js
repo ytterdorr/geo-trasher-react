@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Card from "../components/Card/Card";
 import DownloadDataButton from "../components/DownloadData/DownloadDataButton";
 import ClickHandler from "../components/ClickHandler/ClickHandler";
+import MapContainer from "../components/MapContainer";
+import ResultView from "../views/ResultView";
 
 class SessionView extends Component {
   constructor(props) {
@@ -16,6 +18,8 @@ class SessionView extends Component {
       sendingData: false,
       message: "",
       onScreenButtons: false,
+      sessionEnded: false,
+      sessonStorageItems: [],
     };
     this.handleEndSession = this.handleEndSession.bind(this);
     this.startSession = this.startSession.bind(this);
@@ -87,15 +91,21 @@ class SessionView extends Component {
     let storeResult = await this.sendDataToServer().then((result) => result);
     console.log("StoreResult", storeResult);
     if (storeResult.success) {
+      // sessionStorage.setItem("sessionID", 0);
+      // if (
+      //   !localStorage.GeoTrashName ||
+      //   localStorage.GeoTrashName === "Anonymous"
+      // ) {
+      //   this.props.updateView("FirstView");
+      // } else {
+      //   this.props.updateView("UserView");
+      // }
+      let sessionStorageItems = JSON.parse(sessionStorage.items);
+      this.setState({ sessionStorageItems });
       sessionStorage.setItem("sessionID", 0);
-      if (
-        !localStorage.GeoTrashName ||
-        localStorage.GeoTrashName === "Anonymous"
-      ) {
-        this.props.updateView("FirstView");
-      } else {
-        this.props.updateView("UserView");
-      }
+      sessionStorage.removeItem("items");
+      sessionStorage.removeItem("sessionName");
+      this.setState({ sessionEnded: true });
     } else {
       console.log("Error sending data");
       this.setState({ message: "Error sending data, please try again." });
@@ -206,8 +216,9 @@ class SessionView extends Component {
       .then((result) => {
         // Clear session storage
         sessionStorage.setItem("sessionID", 0);
-        sessionStorage.removeItem("items");
-        sessionStorage.removeItem("sessionName");
+        if (sessionStorage.items) sessionStorage.removeItem("items");
+        if (sessionStorage.sessionName)
+          sessionStorage.removeItem("sessionName");
       })
       .catch((error) => {
         console.log("Send not successful");
@@ -217,73 +228,83 @@ class SessionView extends Component {
   render() {
     return (
       <div id="" style={styles.container}>
-        <ClickHandler sendNumClicks={this.saveByNumClicks} />
-        <h1 style={styles.heading}>
-          {this.state.sessionName
-            ? this.state.sessionName
-            : "Anonymous Session"}
-        </h1>
-        <a href="#" onClick={this.changeSessionName}>
-          Change Title
-        </a>
-        <div>{this.state.message}</div>
+        {this.state.sessionEnded ? (
+          <ResultView
+            styles={styles}
+            sessionName={this.state.sessionName}
+            itemCount={this.state.itemCount}
+            itemTypes={this.state.itemTypes}
+            updateView={this.props.updateView}
+            sessionStorageItems={this.state.sessionStorageItems}
+          />
+        ) : (
+          <React.Fragment>
+            <ClickHandler sendNumClicks={this.saveByNumClicks} />
+            <h1 style={styles.heading}>
+              {this.state.sessionName
+                ? this.state.sessionName
+                : "Anonymous Session"}
+            </h1>
+            <a href="#" onClick={this.changeSessionName}>
+              Change Title
+            </a>
+            <div>{this.state.message}</div>
 
-        <br />
-        <Card style={{ padding: 20 }}>
-          <p style={{ margin: 0 }}>
-            <b>Picked Items</b> <br />
-            {this.state.itemTypes.map((item) => {
-              return (
-                <React.Fragment>
-                  {item}: {this.state.itemCount[item]}
-                  <br />
-                </React.Fragment>
-              );
-            })}
-            {/* Nicotine: {this.state.itemCount.Nikotin}
             <br />
-            Other: {this.state.itemCount.Annat} */}
-          </p>
-          <br />
-          <a
-            onClick={this.toggleOnScreenButtons}
-            style={{ color: "blue", textDecoration: "underline" }}
-          >
-            Toggle Onscreen Buttons
-          </a>
-        </Card>
-        {/* <button onClick={this.downloadAsCsv}>Download Session Data</button> */}
-        <br />
-        {this.state.onScreenButtons ? (
-          <div
-            style={{
-              display: "flex",
-              width: "100vw",
-              height: 80,
-              justifyContent: "space-around",
-              fontSize: 20,
-              fontWeight: "bold",
-              marginBottom: 15,
-            }}
-          >
-            {this.state.itemTypes.map((item, i) => (
-              <button
-                key={i}
-                style={{
-                  width: "40%",
-                  backgroundColor: "red",
-                  color: "white",
-                }}
-                onClick={this.onScreenButtonSetter(item)}
+            <Card style={{ padding: 20 }}>
+              <p style={{ margin: 0 }}>
+                <b>Picked Items</b> <br />
+                {this.state.itemTypes.map((item, i) => {
+                  return (
+                    <React.Fragment>
+                      ({i + 1}) {item}: {this.state.itemCount[item]}
+                      <br />
+                    </React.Fragment>
+                  );
+                })}
+              </p>
+
+              <br />
+              <a
+                onClick={this.toggleOnScreenButtons}
+                style={{ color: "blue", textDecoration: "underline" }}
               >
-                {item}
-              </button>
-            ))}
-          </div>
-        ) : null}
-        <DownloadDataButton />
-        <br />
-        <button onClick={this.handleEndSession}>End session</button>
+                Toggle Onscreen Buttons
+              </a>
+            </Card>
+            <br />
+            {this.state.onScreenButtons ? (
+              <div
+                style={{
+                  display: "flex",
+                  width: "100vw",
+                  height: 80,
+                  justifyContent: "space-around",
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  marginBottom: 15,
+                }}
+              >
+                {this.state.itemTypes.map((item, i) => (
+                  <button
+                    key={i}
+                    style={{
+                      width: "40%",
+                      backgroundColor: "red",
+                      color: "white",
+                    }}
+                    onClick={this.onScreenButtonSetter(item)}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+            <DownloadDataButton />
+            <br />
+            <button onClick={this.handleEndSession}>End session</button>
+          </React.Fragment>
+        )}
       </div>
     );
   }
