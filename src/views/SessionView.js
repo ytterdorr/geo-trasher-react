@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Card from "../components/Card/Card";
 import DownloadDataButton from "../components/DownloadData/DownloadDataButton";
 import ClickHandler from "../components/ClickHandler/ClickHandler";
-import MapContainer from "../components/MapContainer";
 import ResultView from "../views/ResultView";
 
 class SessionView extends Component {
@@ -94,15 +93,6 @@ class SessionView extends Component {
     let storeResult = await this.sendDataToServer().then((result) => result);
     console.log("StoreResult", storeResult);
     if (storeResult.success) {
-      // sessionStorage.setItem("sessionID", 0);
-      // if (
-      //   !localStorage.GeoTrashName ||
-      //   localStorage.GeoTrashName === "Anonymous"
-      // ) {
-      //   this.props.updateView("FirstView");
-      // } else {
-      //   this.props.updateView("UserView");
-      // }
       let sessionStorageItems = JSON.parse(sessionStorage.items);
       this.setState({ sessionStorageItems });
       sessionStorage.setItem("sessionID", 0);
