@@ -19,6 +19,7 @@ class SessionView extends Component {
       onScreenButtons: false,
       sessionEnded: false,
       sessonStorageItems: { list: [] },
+      pocketMode: false,
     };
     this.handleEndSession = this.handleEndSession.bind(this);
     this.startSession = this.startSession.bind(this);
@@ -29,6 +30,7 @@ class SessionView extends Component {
     this.changeSessionName = this.changeSessionName.bind(this);
     this.toggleOnScreenButtons = this.toggleOnScreenButtons.bind(this);
     this.onScreenButtonSetter = this.onScreenButtonSetter.bind(this);
+    this.togglePocketMode = this.togglePocketMode.bind(this);
   }
 
   /// Get date
@@ -136,6 +138,10 @@ class SessionView extends Component {
     this.setState({ onScreenButtons: !this.state.onScreenButtons });
   }
 
+  togglePocketMode() {
+    this.setState({ pocketMode: !this.state.pocketMode });
+  }
+
   startSession = async () => {
     // Check username
     if (!localStorage.GeoTrashName) {
@@ -233,69 +239,101 @@ class SessionView extends Component {
         ) : (
           <React.Fragment>
             <ClickHandler sendNumClicks={this.saveByNumClicks} />
-            <h1 style={styles.heading}>
-              {this.state.sessionName
-                ? this.state.sessionName
-                : "Anonymous Session"}
-            </h1>
-            <a href="#" onClick={this.changeSessionName}>
-              Change Title
-            </a>
-            <div>{this.state.message}</div>
-
-            <br />
-            <Card style={{ padding: 20 }}>
-              <p style={{ margin: 0 }}>
-                <b>Picked Items</b> <br />
-                {this.state.itemTypes.map((item, i) => {
-                  return (
-                    <React.Fragment>
-                      ({i + 1}) {item}: {this.state.itemCount[item]}
-                      <br />
-                    </React.Fragment>
-                  );
-                })}
-              </p>
-
-              <br />
-              <a
-                onClick={this.toggleOnScreenButtons}
-                style={{ color: "blue", textDecoration: "underline" }}
-              >
-                Toggle Onscreen Buttons
-              </a>
-            </Card>
-            <br />
-            {this.state.onScreenButtons ? (
+            {this.state.pocketMode ? (
               <div
                 style={{
-                  display: "flex",
                   width: "100vw",
-                  height: 80,
-                  justifyContent: "space-around",
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  marginBottom: 15,
+                  height: "100vh",
+                  backgroundColor: "black",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                {this.state.itemTypes.map((item, i) => (
-                  <button
-                    key={i}
-                    style={{
-                      width: "40%",
-                      backgroundColor: "red",
-                      color: "white",
-                    }}
-                    onClick={this.onScreenButtonSetter(item)}
-                  >
-                    {item}
-                  </button>
-                ))}
+                <p style={{ color: "#ccc" }}>Remember to keep your sceen on!</p>
+                <button
+                  onClick={this.togglePocketMode}
+                  style={{
+                    width: "50vw",
+                    height: "10vh",
+                    backgroundColor: "darkblue",
+                    borderRadius: "5px",
+                    color: "#aaa",
+                  }}
+                >
+                  Exit Pocket Mode
+                </button>
               </div>
-            ) : null}
-            <DownloadDataButton />
-            <br />
-            <button onClick={this.handleEndSession}>End session</button>
+            ) : (
+              <React.Fragment>
+                <h1 style={styles.heading}>
+                  {this.state.sessionName
+                    ? this.state.sessionName
+                    : "Anonymous Session"}
+                </h1>
+                <a href="#" onClick={this.changeSessionName}>
+                  Change Title
+                </a>
+                <div>{this.state.message}</div>
+                <br />
+                <button onClick={this.togglePocketMode}>
+                  Pocket mode (dark)
+                </button>
+                <Card style={{ padding: 20 }}>
+                  <p style={{ margin: 0 }}>
+                    <b>Picked Items</b> <br />
+                    {this.state.itemTypes.map((item, i) => {
+                      return (
+                        <React.Fragment>
+                          ({i + 1}) {item}: {this.state.itemCount[item]}
+                          <br />
+                        </React.Fragment>
+                      );
+                    })}
+                  </p>
+
+                  <br />
+                  <a
+                    onClick={this.toggleOnScreenButtons}
+                    style={{ color: "blue", textDecoration: "underline" }}
+                  >
+                    Toggle Onscreen Buttons
+                  </a>
+                </Card>
+                <br />
+                {this.state.onScreenButtons ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100vw",
+                      height: 80,
+                      justifyContent: "space-around",
+                      fontSize: 20,
+                      fontWeight: "bold",
+                      marginBottom: 15,
+                    }}
+                  >
+                    {this.state.itemTypes.map((item, i) => (
+                      <button
+                        key={i}
+                        style={{
+                          width: "40%",
+                          backgroundColor: "red",
+                          color: "white",
+                        }}
+                        onClick={this.onScreenButtonSetter(item)}
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+                <DownloadDataButton />
+                <br />
+                <button onClick={this.handleEndSession}>End session</button>
+              </React.Fragment>
+            )}
           </React.Fragment>
         )}
       </div>
