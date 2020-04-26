@@ -44,9 +44,10 @@ export class MapContainer extends Component {
         google={this.props.google}
         zoom={14}
         style={mapStyles}
+        // set start position as lat and lng of first item from list
         initialCenter={{
-          lat: 58.4283254,
-          lng: 15.574016,
+          lat: this.props.sessionStorageItems.list[0][1],
+          lng: this.props.sessionStorageItems.list[0][2],
         }}
       >
         {this.state.locations.map((item, i) => (
