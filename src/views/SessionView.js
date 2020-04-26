@@ -19,7 +19,7 @@ class SessionView extends Component {
       message: "",
       onScreenButtons: false,
       sessionEnded: false,
-      sessonStorageItems: [],
+      sessonStorageItems: { list: [] },
     };
     this.handleEndSession = this.handleEndSession.bind(this);
     this.startSession = this.startSession.bind(this);
@@ -84,7 +84,10 @@ class SessionView extends Component {
     // console.log(sessionItems);
 
     // Update State
-    this.setState({ itemCount: sessionItems.counter });
+    this.setState({
+      itemCount: sessionItems.counter,
+      sessionStorageItems: sessionItems,
+    });
   };
 
   handleEndSession = async function () {

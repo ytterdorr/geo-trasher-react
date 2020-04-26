@@ -3,7 +3,12 @@ import React from "react";
 const DownloadDataButton = (props) => {
   const downloadAsCsv = () => {
     let headers = [["Type", "Latitude", "Longitude", "DateTime", "SessionID"]];
-    let data = JSON.parse(sessionStorage.items).list;
+    let data;
+    if (props.itemList) {
+      data = props.itemList;
+    } else {
+      data = JSON.parse(sessionStorage.items).list;
+    }
     let arr = headers.concat(data);
     let csvContent = arr.map((e) => e.join(",")).join("\n");
     let defaultName = sessionStorage.sessionName;

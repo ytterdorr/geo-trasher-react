@@ -53,7 +53,7 @@ const ResultView = (props) => {
         ></MapContainer>
       </div>
       <br />
-      <DownloadDataButton />
+      <DownloadDataButton itemList={props.sessionStorageItems.list} />
       <br />
       <button onClick={handleFinish}>Finish</button>
     </div>
