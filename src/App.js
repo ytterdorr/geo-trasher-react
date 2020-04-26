@@ -3,6 +3,7 @@ import "./App.css";
 import FirstView from "./views/FirstView";
 import UserView from "./views/UserView";
 import SessionView from "./views/SessionView";
+import InstructionsView from "./views/InstructionsView";
 
 function App() {
   // const serverHost = "http://localhost:5000";
@@ -48,6 +49,11 @@ function App() {
         break;
       case "SessionView":
         view = <SessionView serverHost={serverHost} updateView={updateView} />;
+        break;
+      case "InstructionsView":
+        view = (
+          <InstructionsView serverHost={serverHost} updateView={updateView} />
+        );
         break;
       default:
         view = `Error loading page: ${viewKey}`;

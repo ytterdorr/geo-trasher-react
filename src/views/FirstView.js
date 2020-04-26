@@ -12,6 +12,10 @@ const FirstView = (props) => {
     props.updateView("SessionView");
   };
 
+  const handleShowInstructions = () => {
+    props.updateView("InstructionsView");
+  };
+
   const handleMyPageButton = () => {
     props.updateView("UserView");
   };
@@ -34,6 +38,9 @@ const FirstView = (props) => {
       <button style={myStyles.Button} onClick={handleSessionButton}>
         Anonymous session
       </button>
+      <a href="#" onClick={handleShowInstructions}>
+        How to use this page
+      </a>
       <p>This is a work in progress, made by Tore Haglund. </p>
       <a href="mailto: tore.haglund@gmail.com">Send Feedback</a>
     </div>
