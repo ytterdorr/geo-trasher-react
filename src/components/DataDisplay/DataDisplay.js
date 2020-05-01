@@ -49,7 +49,9 @@ const DataDisplay = (props) => {
             Nicotine: {itemCount.nikotin} <br />
             Plastic: {itemCount.plastic} <br />
             Other: {itemCount.annat} <br />
-            <b>Total: {itemCount.nikotin + itemCount.annat}</b>
+            <b>
+              Total: {itemCount.nikotin + itemCount.plastic + itemCount.annat}
+            </b>
           </p>
         )}
         {/* <button type="button" onClick={getSessionItemCount}>
