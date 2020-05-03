@@ -1,0 +1,38 @@
+Diskutera m Fabian:
+- React projektstruktur
+  - Styling?
+- Datahantering frontend: Local storage, Session storage, react state. 
+- Service worker: skicka data när session stängs.
+- Dokumentation: Bugglista, förbättringslista 
+- Backend: flytta till riktig databas? Databasstruktur.
+- Testning
+
+General:
+=0= Make sure user has https.
+
+-> There is an error registerign itemtype "null" on advanced clicker...
+-> Make a better way with the user screen summation
+=0= Add map to session end. 
+=0= startsidan ska visa rätt total.
+
+SessionView: 
+=0= Enable Rename session
+  (Input field + server update)
+
+
+UserView:
+=0= Make Title based on localStorage.
+-> Make detailed info relevant (i.e. date, start end time, download data, map)
+
+Optional/optimization:
+- make session list scrollable
+
+Get more control of the map:
+https://www.cluemediator.com/implement-google-maps-in-reactjs
+https://www.cluemediator.com/add-multiple-custom-markers-to-google-maps-in-reactjs
+
+
+
+
+Links
+https://www.npmjs.com/package/google-maps-react
