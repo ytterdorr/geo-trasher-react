@@ -1,11 +1,63 @@
 Diskutera m Fabian:
 - React projektstruktur
   - Styling?
-- Datahantering frontend: Local storage, Session storage, react state. 
+    * https://styled-components.com/
+- Datahantering frontend: Local storage, Session storage, react state.
+    * https://reactjs.org/docs/hooks-reference.html#usecontext
+- Environment variables.
 - Service worker: skicka data när session stängs.
 - Dokumentation: Bugglista, förbättringslista 
 - Backend: flytta till riktig databas? Databasstruktur.
+
+
+User
+- userId
+- username
+- password (hashed)
+- UserSettings
+
+UserSettings
+- userId
+- color
+- darkmode
+- etc...
+
+Session
+- sessionId
+- [Item]
+- name
+- timeStart
+- timeEnd
+
+Item
+- sessionId
+- type
+- latitude
+- longitude
+- timestamp
+
+
+var itemsSchema = new Schema({
+    type:  String, // String is shorthand for {type: String}
+    latitude: String,
+    body:   String,
+    comments: [{ body: String, date: Date }],
+    date: { type: Date, default: Date.now },
+    hidden: Boolean,
+    meta: {
+      votes: Number,
+      favs:  Number
+    }
+  });
+
+const addItem = (data) => mongoose.createObject(itemsSchema, data);
+
+
 - Testning
+  * https://www.typescriptlang.org/
+
+
+- testa/hantera olika skärmstorlekar.
 
 General:
 =0= Make sure user has https.
@@ -36,3 +88,17 @@ https://www.cluemediator.com/add-multiple-custom-markers-to-google-maps-in-react
 
 Links
 https://www.npmjs.com/package/google-maps-react
+
+
+
+Comments on ClickHandler:
+
+// Testa att göra det till en custom hook det blir mindre kod och lite mer läsligt, och snabbare
+// Ta ut konstanter ur state, doubleClickTie
+// useAdvanced kanske skall vara mer utav en prop om den alls skall finnas, kanske splitta komponenten i två versioner
+// Kanske lite tydligare variabel namn skulle vara najs, doubleClickTime => doubleClickThreshold?
+
+Comments on SessionView:
+
+// Lägga ut all "text" till separat fil med någon namngivnings-konvention.
+// Jag tänker att man skall byta till styled components för styling
