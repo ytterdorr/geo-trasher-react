@@ -1,5 +1,5 @@
 # GeoTrasher
-A React based frontend for the [GeoTrasher] (https://github.com/ytterdorr/GeoTrasher) plogging logger projecct. 
+A React based frontend for the [GeoTrasher](https://github.com/ytterdorr/GeoTrasher) plogging logger projecct. 
 
 
 ## Get coding!
